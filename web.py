@@ -1,5 +1,5 @@
 from sqlalchemy.orm import sessionmaker
-from Final import Customer, Employees, Appointments
+from Final import Customer, Employees, Appointments, Invoice
 from sqlalchemy import create_engine, func
 import logging
 logging.basicConfig()
@@ -16,6 +16,7 @@ def main_menu():
     print("Welcome to you Database")
     print("1. Make appointment")
     print("2. Add employee ")
+    print("3. get invoice")
     
     choice = input("Enter choice: ")
 
@@ -33,6 +34,9 @@ def main_menu():
             add_appointment(c_id, e_id)
     elif choice == "2":
         add_employee()
+    elif choice == "3":
+        get_invoice()
+        print("")
     else:
         print("invalid option. please select a valid option")
 
@@ -55,16 +59,15 @@ def make_appointment():
     email = input("Email: ")
     Automobile_type = input("Enter make and model: ")
     #customer_ID = random.randint(1,1000)
-
     customer = Customer(C_f_name=C_f_name, C_l_name=C_l_name,email=email,Automobile_type=Automobile_type)
     session.add(customer)
     session.commit()
     print(f"Customer {customer.customer_ID} added")
-
-    add_appointment(Customer.customer_ID,Employees.Employee_ID)
+    add_appointment(customer.customer_ID,Employees.Employee_ID)
 
     
 def add_appointment(customer_id, employee_id):
+    print(f'{employee_id}')
     appointment_id = random.randint(1,1000)
     print("choose status:")
     status = input("Not started, In progress, Complete: ")
@@ -77,7 +80,26 @@ def add_appointment(customer_id, employee_id):
     session.add(appointment)
     session.commit()
     print("appointment was made")
+    create_invoice(appointment.appointment_id, appointment.customer_id)
 
+def create_invoice(appointment_id, customer_id):
+    p = input("Enter a price: ")
+    price = int(p)
+    invoice = Invoice(appioment_id=appointment_id, customer_id=customer_id, TotalCost=price)
+    session.add(invoice)
+    session.commit()
+    print("invoice was made")
+
+def get_invoice():
+    o = input("Enter appointment ID: ")
+    appoioment_id = int(o)
+    invoice = session.query(Invoice).filter_by(appioment_id=appoioment_id).first()
+    if invoice:
+         print(f"\n ----Invoice for {invoice.appioment_id}")
+         print(f"customer name :{invoice.customer_id} ")
+         print(f"Total cost: {invoice.TotalCost}")
+    else:
+        print("problem getting invoice")
 
 
 if __name__ == "__main__":

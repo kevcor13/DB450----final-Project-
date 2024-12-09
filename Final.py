@@ -69,21 +69,14 @@ class Invoice(Base):
     customer = relationship('Customer')
 
 
+
 # Adding back_populates relationships
 Customer.appointments = relationship('Appointments', back_populates='customer', cascade="all, delete-orphan")
 Employees.appointments = relationship('Appointments', back_populates='employee', cascade="all, delete-orphan")
 Parts.needed_parts = relationship('NeededParts', back_populates='part', cascade="all, delete-orphan")
 Appointments.needed_parts = relationship('NeededParts', back_populates='appointment', cascade="all, delete-orphan")
-
 # Create a database engine
 engine = create_engine('sqlite:///finalchat.db')
 
 # Create all tables
 Base.metadata.create_all(engine)
-
-# Create a session
-
-# Example: Adding a user
-#new_user = User(username='test_user', password='securepassword')
-#session.add(new_user)
-#session.commit()
