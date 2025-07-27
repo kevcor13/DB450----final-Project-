@@ -19,5 +19,8 @@ It’s designed to simulate a real-world mechanic shop’s backend operations wi
 - SQLAlchemy
 
 ## SetUp Instructions
->> pip install sqlalchemy
->> python main.py
+Install Dependencies
+- pip install sqlalchemy
+
+Run the program
+- python main.py
