@@ -2,6 +2,7 @@
 A full-featured database system built with **Python** and **SQLAlchemy** to help manage a mechanic shop’s daily operations—tracking customers, employees, appointments, parts used, and generating invoices.
 
 ## Overview/Features 
+This project is a small command-line information system for an auto shop. It allows for storing data information, tracking invoices in a locla SQLite database (finalchat.db) via SQLAlchemy models and provides a basic menu
 
 This command-line application provides tools for:
 - Add and manage customers and employees
@@ -17,6 +18,15 @@ It’s designed to simulate a real-world mechanic shop’s backend operations wi
 - Python
 - SQLite
 - SQLAlchemy
+
+## Data models
+* Parts - common part names
+* employees - staff members with tracked labor hours
+* Customers - customer tracking with personal data
+* Appointments - track scheduled appointments
+* Invocies - keeping track of work/hours for a job with invoices
+
+##Usage 
 
 ## SetUp Instructions
 Install Dependencies
