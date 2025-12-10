@@ -26,11 +26,14 @@ It’s designed to simulate a real-world mechanic shop’s backend operations wi
 * Appointments - track scheduled appointments
 * Invocies - keeping track of work/hours for a job with invoices
 
-##Usage 
+## Usage 
 
 ## SetUp Instructions
-Install Dependencies
-- pip install sqlalchemy
+Prerequisites 
+* pythosn 3.10+
 
-Run the program
+1) Clone the repository
+2) Install Dependencies
+- pip install sqlalchemy
+3) Run the program
 - python main.py
