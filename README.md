@@ -28,7 +28,7 @@ It’s designed to simulate a real-world mechanic shop’s backend operations wi
 * Invocies - keeping track of work/hours for a job with invoices
 
 ## Usage
-Once we run the script we will see a menu like the one below with the given options: 
+Once we run the script we will see a menu like the one below with the given options:<br>
 <img width="285" height="82" alt="Screenshot 2025-12-10 at 3 58 08 PM" src="https://github.com/user-attachments/assets/916db0b8-8e89-4a37-9d9f-787e56758e49" />
 
 1) Add an employee
@@ -67,14 +67,14 @@ Prerequisites
 
 ## Example 
 
-1) Add Employee 
+1) Add Employee<br>
 <img width="325" height="136" alt="Screenshot 2025-12-10 at 4 11 52 PM" src="https://github.com/user-attachments/assets/49a72169-f521-4038-a6fa-2c9d08bd9ee3" />
 
-2) Set up Appointment
-<img width="440" height="407" alt="Screenshot 2025-12-10 at 4 16 08 PM" src="https://github.com/user-attachments/assets/bbbfb517-fb53-4f09-b967-9795acf7ca7d" />
+2) Set up Appointment<br>
+<img width="440" height="407" alt="Screenshot 2025-12-10 at 4 16 08 PM" src="https://github.com/user-attachments/assets/bbbfb517-fb53-4f09-b967-9795acf7ca7d" /><br>
 <img width="516" height="675" alt="Screenshot 2025-12-10 at 4 16 47 PM" src="https://github.com/user-attachments/assets/1834de0f-9253-4c69-a86d-149f506f1125" />
 
-3) Print invoice
+3) Print invoice<br>
 <img width="351" height="463" alt="Screenshot 2025-12-10 at 4 17 16 PM" src="https://github.com/user-attachments/assets/27da46a6-a138-4c81-b0eb-c723749e709e" />
 
 ## Author 
