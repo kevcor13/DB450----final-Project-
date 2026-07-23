@@ -216,6 +216,13 @@ button, input, select {
 }
 .btn-danger-text:hover { text-decoration: underline; }
 
+.row-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
 /* ==========================================================================
    Table
    ========================================================================== */
@@ -260,6 +267,13 @@ tbody tr:hover { background: #FCFBF9; }
 }
 
 .mono { font-family: var(--font-mono); }
+
+.cell-sub {
+  display: block;
+  font-size: 12px;
+  color: var(--ink-faint);
+  margin-top: 2px;
+}
 
 .pill {
   display: inline-block;
@@ -358,6 +372,15 @@ tbody tr:hover { background: #FCFBF9; }
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
+}
+
+.form-section-heading {
+  font-family: var(--font-display);
+  font-size: 13px;
+  margin: 4px 0 -6px;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .form-actions {
@@ -518,6 +541,15 @@ tbody tr:hover { background: #FCFBF9; }
   .main { padding: 20px; }
   .form-grid { grid-template-columns: 1fr; }
   .modal-wide { width: calc(100vw - 32px); }
+
+  /* Tables have more columns than fit a phone width — scroll sideways
+     instead of clipping content (Customers/Parts rows have action buttons
+     that would otherwise disappear off the edge). */
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  table { min-width: 540px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

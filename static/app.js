@@ -16,6 +16,12 @@ function money(n) {
   return `$${Number(n).toFixed(2)}`;
 }
 
+function escapeHtml(str) {
+  return String(str ?? "").replace(/[&<>"']/g, (ch) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+  }[ch]));
+}
+
 function statusPillClass(status) {
   return "pill pill-" + status.toLowerCase().replace(/\s+/g, "-");
 }
@@ -101,7 +107,7 @@ async function loadEmployees() {
   body.innerHTML = employees.map((e) => `
     <tr>
       <td class="mono">${e.id}</td>
-      <td>${e.first_name} ${e.last_name}</td>
+      <td>${escapeHtml(e.first_name)} ${escapeHtml(e.last_name)}</td>
       <td class="mono">${money(e.hourly_rate)}/hr</td>
       <td class="mono">${e.labor_hours}</td>
       <td><button class="btn-danger-text" data-delete-employee="${e.id}">Remove</button></td>
@@ -148,25 +154,39 @@ document.getElementById("form-new-employee").addEventListener("submit", async (e
 // Customers
 // ---------------------------------------------------------------------------
 
+function vehicleSummary(c) {
+  const bits = [c.vehicle_year, c.vehicle_make, c.vehicle_model].filter(Boolean);
+  const line1 = bits.length ? bits.join(" ") : c.automobile_type;
+  const sub = [c.automobile_type, c.vehicle_color].filter(Boolean).join(" · ");
+  return { line1, sub: bits.length ? sub : (c.vehicle_color || "") };
+}
+
 async function loadCustomers(search = "") {
   const customers = await api(`/customers${search ? "?search=" + encodeURIComponent(search) : ""}`);
   customersCache = customers;
   const body = document.getElementById("customers-body");
 
   if (customers.length === 0) {
-    body.innerHTML = `<tr><td colspan="5" class="empty-row">No customers match yet.</td></tr>`;
+    body.innerHTML = `<tr><td colspan="6" class="empty-row">No customers match yet.</td></tr>`;
     return;
   }
 
-  body.innerHTML = customers.map((c) => `
+  body.innerHTML = customers.map((c) => {
+    const v = vehicleSummary(c);
+    return `
     <tr>
       <td class="mono">${c.id}</td>
-      <td>${c.first_name} ${c.last_name}</td>
-      <td>${c.email}</td>
-      <td>${c.automobile_type}</td>
-      <td><button class="btn-danger-text" data-delete-customer="${c.id}">Remove</button></td>
+      <td>${escapeHtml(c.first_name)} ${escapeHtml(c.last_name)}</td>
+      <td>${escapeHtml(c.email)}</td>
+      <td>${escapeHtml(v.line1)}${v.sub ? `<span class="cell-sub">${escapeHtml(v.sub)}</span>` : ""}</td>
+      <td class="mono">${escapeHtml(c.license_plate || "—")}</td>
+      <td class="row-actions">
+        <button class="btn btn-ghost btn-sm" data-edit-customer="${c.id}">Edit</button>
+        <button class="btn-danger-text" data-delete-customer="${c.id}">Remove</button>
+      </td>
     </tr>
-  `).join("");
+  `;
+  }).join("");
 
   body.querySelectorAll("[data-delete-customer]").forEach((btn) => {
     btn.addEventListener("click", async () => {
@@ -180,27 +200,79 @@ async function loadCustomers(search = "") {
       }
     });
   });
+
+  body.querySelectorAll("[data-edit-customer]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const customer = customersCache.find((c) => c.id === Number(btn.dataset.editCustomer));
+      if (customer) openCustomerModal(customer);
+    });
+  });
 }
 
 document.getElementById("customer-search").addEventListener("input", (ev) => {
   loadCustomers(ev.target.value);
 });
 
+function openCustomerModal(customer = null) {
+  const form = document.getElementById("form-new-customer");
+  form.reset();
+  setFormError(form, "");
+
+  const title = document.getElementById("customer-modal-title");
+  const submitBtn = document.getElementById("customer-submit-btn");
+
+  if (customer) {
+    title.textContent = `Edit customer #${customer.id}`;
+    submitBtn.textContent = "Save changes";
+    form.elements["customer_id"].value = customer.id;
+    form.elements["first_name"].value = customer.first_name || "";
+    form.elements["last_name"].value = customer.last_name || "";
+    form.elements["email"].value = customer.email || "";
+    form.elements["automobile_type"].value = customer.automobile_type || "";
+    form.elements["vehicle_year"].value = customer.vehicle_year ?? "";
+    form.elements["vehicle_make"].value = customer.vehicle_make || "";
+    form.elements["vehicle_model"].value = customer.vehicle_model || "";
+    form.elements["vehicle_color"].value = customer.vehicle_color || "";
+    form.elements["license_plate"].value = customer.license_plate || "";
+    form.elements["vin"].value = customer.vin || "";
+  } else {
+    title.textContent = "New customer";
+    submitBtn.textContent = "Add customer";
+    form.elements["customer_id"].value = "";
+  }
+
+  openModal("new-customer");
+}
+
+document.getElementById("btn-new-customer").addEventListener("click", () => openCustomerModal());
+
 document.getElementById("form-new-customer").addEventListener("submit", async (ev) => {
   ev.preventDefault();
   const form = ev.target;
   const fd = new FormData(form);
+  const customerId = fd.get("customer_id");
+
+  const payload = {
+    first_name: fd.get("first_name"),
+    last_name: fd.get("last_name"),
+    email: fd.get("email"),
+    automobile_type: fd.get("automobile_type"),
+    vehicle_year: fd.get("vehicle_year"),
+    vehicle_make: fd.get("vehicle_make"),
+    vehicle_model: fd.get("vehicle_model"),
+    vehicle_color: fd.get("vehicle_color"),
+    license_plate: fd.get("license_plate"),
+    vin: fd.get("vin"),
+  };
+
   try {
-    await api("/customers", {
-      method: "POST",
-      body: JSON.stringify({
-        first_name: fd.get("first_name"),
-        last_name: fd.get("last_name"),
-        email: fd.get("email"),
-        automobile_type: fd.get("automobile_type"),
-      }),
-    });
-    showToast("Customer added");
+    if (customerId) {
+      await api(`/customers/${customerId}`, { method: "PATCH", body: JSON.stringify(payload) });
+      showToast("Customer updated");
+    } else {
+      await api("/customers", { method: "POST", body: JSON.stringify(payload) });
+      showToast("Customer added");
+    }
     form.reset();
     closeAllModals();
     loadCustomers();
@@ -217,14 +289,96 @@ async function loadParts() {
   const parts = await api("/parts");
   partsCache = parts;
   const body = document.getElementById("parts-body");
+
+  if (parts.length === 0) {
+    body.innerHTML = `<tr><td colspan="4" class="empty-row">No parts yet — add your first one.</td></tr>`;
+    return;
+  }
+
   body.innerHTML = parts.map((p) => `
     <tr>
       <td class="mono">${p.id}</td>
-      <td>${p.name}</td>
+      <td>${escapeHtml(p.name)}</td>
       <td class="mono">${money(p.price)}</td>
+      <td class="row-actions">
+        <button class="btn btn-ghost btn-sm" data-edit-part="${p.id}">Edit</button>
+        <button class="btn-danger-text" data-delete-part="${p.id}">Delete</button>
+      </td>
     </tr>
   `).join("");
+
+  body.querySelectorAll("[data-edit-part]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const part = partsCache.find((p) => p.id === Number(btn.dataset.editPart));
+      if (part) openPartModal(part);
+    });
+  });
+
+  body.querySelectorAll("[data-delete-part]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      if (!confirm("Delete this part? It will be removed from the catalog and from any past work orders that used it.")) return;
+      try {
+        await api(`/parts/${btn.dataset.deletePart}`, { method: "DELETE" });
+        showToast("Part deleted");
+        loadParts();
+      } catch (e) {
+        showToast(e.message, true);
+      }
+    });
+  });
 }
+
+function openPartModal(part = null) {
+  const form = document.getElementById("form-part");
+  form.reset();
+  setFormError(form, "");
+
+  const title = document.getElementById("part-modal-title");
+  const submitBtn = document.getElementById("part-submit-btn");
+
+  if (part) {
+    title.textContent = `Edit part #${part.id}`;
+    submitBtn.textContent = "Save changes";
+    form.elements["part_id"].value = part.id;
+    form.elements["name"].value = part.name;
+    form.elements["price"].value = part.price;
+  } else {
+    title.textContent = "New part";
+    submitBtn.textContent = "Add part";
+    form.elements["part_id"].value = "";
+  }
+
+  openModal("new-part");
+}
+
+document.getElementById("btn-new-part").addEventListener("click", () => openPartModal());
+
+document.getElementById("form-part").addEventListener("submit", async (ev) => {
+  ev.preventDefault();
+  const form = ev.target;
+  const fd = new FormData(form);
+  const partId = fd.get("part_id");
+
+  const payload = {
+    name: fd.get("name"),
+    price: fd.get("price"),
+  };
+
+  try {
+    if (partId) {
+      await api(`/parts/${partId}`, { method: "PATCH", body: JSON.stringify(payload) });
+      showToast("Part updated");
+    } else {
+      await api("/parts", { method: "POST", body: JSON.stringify(payload) });
+      showToast("Part added");
+    }
+    form.reset();
+    closeAllModals();
+    loadParts();
+  } catch (e) {
+    setFormError(form, e.message);
+  }
+});
 
 // ---------------------------------------------------------------------------
 // Appointments
@@ -242,8 +396,8 @@ async function loadAppointments() {
   body.innerHTML = appointments.map((a) => `
     <tr>
       <td class="mono">#${a.id}</td>
-      <td>${a.customer_name}</td>
-      <td>${a.employee_name}</td>
+      <td>${escapeHtml(a.customer_name)}</td>
+      <td>${escapeHtml(a.employee_name)}</td>
       <td class="mono">${a.date}</td>
       <td>
         <select class="status-select" data-appointment-id="${a.id}">
@@ -284,7 +438,7 @@ function renderPartsChecklist() {
   container.innerHTML = partsCache.map((p) => `
     <div class="part-row">
       <input type="checkbox" data-part-check="${p.id}">
-      <span>${p.name}</span>
+      <span>${escapeHtml(p.name)}</span>
       <span class="part-price mono">${money(p.price)}</span>
       <input type="number" min="1" value="1" data-part-qty="${p.id}" disabled>
     </div>
@@ -330,10 +484,10 @@ function updateTicketPreview() {
 
 function populateAppointmentForm() {
   const custSelect = document.getElementById("apt-customer-select");
-  custSelect.innerHTML = customersCache.map((c) => `<option value="${c.id}">${c.first_name} ${c.last_name}</option>`).join("");
+  custSelect.innerHTML = customersCache.map((c) => `<option value="${c.id}">${escapeHtml(c.first_name)} ${escapeHtml(c.last_name)}</option>`).join("");
 
   const empSelect = document.getElementById("apt-employee-select");
-  empSelect.innerHTML = employeesCache.map((e) => `<option value="${e.id}">${e.first_name} ${e.last_name} — ${money(e.hourly_rate)}/hr</option>`).join("");
+  empSelect.innerHTML = employeesCache.map((e) => `<option value="${e.id}">${escapeHtml(e.first_name)} ${escapeHtml(e.last_name)} — ${money(e.hourly_rate)}/hr</option>`).join("");
 
   const statusSelect = document.getElementById("apt-status-select");
   statusSelect.innerHTML = STATUSES.map((s) => `<option value="${s}">${s}</option>`).join("");
@@ -396,7 +550,7 @@ async function loadInvoices() {
   body.innerHTML = invoices.map((inv) => `
     <tr>
       <td class="mono">#${inv.appointment_id}</td>
-      <td>${inv.customer_name}</td>
+      <td>${escapeHtml(inv.customer_name)}</td>
       <td class="mono">${money(inv.parts_cost)}</td>
       <td class="mono">${money(inv.labor_cost)}</td>
       <td class="mono">${money(inv.total_cost)}</td>
@@ -432,12 +586,12 @@ async function showInvoiceTicket(appointmentId) {
       <div class="ticket-title">Work order #${inv.appointment_id}</div>
       <div>${inv.date} · ${inv.status}</div>
       <hr class="ticket-divider">
-      <div class="ticket-row"><span>Customer</span><span>${inv.customer_name}</span></div>
-      <div class="ticket-row"><span>Tech</span><span>${inv.employee_name}</span></div>
+      <div class="ticket-row"><span>Customer</span><span>${escapeHtml(inv.customer_name)}</span></div>
+      <div class="ticket-row"><span>Tech</span><span>${escapeHtml(inv.employee_name)}</span></div>
       <hr class="ticket-divider">
       ${inv.parts.map((p) => `
         <div class="ticket-row">
-          <span>${p.name} × ${p.quantity}</span>
+          <span>${escapeHtml(p.name)} × ${p.quantity}</span>
           <span>${money(p.subtotal)}</span>
         </div>
       `).join("") || '<div class="ticket-row"><span>No parts used</span><span></span></div>'}
