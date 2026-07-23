@@ -37,6 +37,15 @@ class Customer(Base):
     email = Column(String, nullable=False)
     Automobile_type = Column(String, nullable=False)
 
+    # Extra vehicle detail — all optional so existing rows / older callers
+    # that only set Automobile_type keep working.
+    vehicle_year = Column(Integer, nullable=True)
+    vehicle_make = Column(String, nullable=True)
+    vehicle_model = Column(String, nullable=True)
+    vehicle_color = Column(String, nullable=True)
+    license_plate = Column(String, nullable=True)
+    vin = Column(String, nullable=True)
+
     appointments = relationship('Appointments', back_populates='customer', cascade="all, delete-orphan")
 
 
