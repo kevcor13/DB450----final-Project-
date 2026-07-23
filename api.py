@@ -25,7 +25,7 @@ from sqlalchemy.orm import sessionmaker
 # project. If you ever rename that file, update this import to match.
 from Final import Customer, Employees, Appointments, NeededParts, Invoice, Parts, Base, get_engine, VALID_STATUSES
 
-DATABASE_URL = os.environ.get("DATABASE_URL", "sqlite:///finalchat.db")
+DATABASE_URL = os.environ.get("postgresql://postgres:usDCpoZwpxniaGPvCYkvbmOOFjvtXLpL@postgres.railway.internal:5432/railway", "sqlite:///finalchat.db")
 
 app = Flask(__name__, static_folder="static", static_url_path="")
 engine = get_engine(DATABASE_URL)
