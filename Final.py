@@ -58,8 +58,12 @@ class Appointments(Base):
     Date = Column(Date, nullable=False)
     labor_hours_billed = Column(Integer, nullable=False, default=1)
 
+    # FIXED: Added double quotes around "Status" so PostgreSQL preserves the case
     __table_args__ = (
-        CheckConstraint(f"Status IN {VALID_STATUSES}", name="valid_status"),
+        CheckConstraint(
+            '"Status" IN (\'Scheduled\', \'In Progress\', \'Completed\', \'Cancelled\')', 
+            name="valid_status"
+        ),
     )
 
     customer = relationship('Customer', back_populates='appointments')
