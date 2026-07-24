@@ -53,32 +53,6 @@ document.querySelectorAll(".nav-item").forEach((btn) => {
   btn.addEventListener("click", () => switchSection(btn.dataset.section));
 });
 
-const controlTab = document.getElementById("control-tab");
-const navPanel = document.getElementById("nav-panel");
-
-controlTab?.addEventListener("click", () => {
-  const isOpen = navPanel.classList.toggle("open");
-  controlTab.classList.toggle("open", isOpen);
-  controlTab.setAttribute("aria-expanded", String(isOpen));
-});
-
-// Close the dropdown once a section is picked
-document.querySelectorAll(".nav-item").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    navPanel.classList.remove("open");
-    controlTab?.classList.remove("open");
-    controlTab?.setAttribute("aria-expanded", "false");
-  });
-});
-
-// Close when tapping outside the menu
-document.addEventListener("click", (ev) => {
-  if (navPanel && controlTab && !navPanel.contains(ev.target) && !controlTab.contains(ev.target)) {
-    navPanel.classList.remove("open");
-    controlTab.classList.remove("open");
-    controlTab.setAttribute("aria-expanded", "false");
-  }
-});
 function switchSection(name) {
   document.querySelectorAll(".nav-item").forEach((b) => b.classList.toggle("active", b.dataset.section === name));
   document.querySelectorAll(".section").forEach((s) => s.classList.toggle("active", s.id === `section-${name}`));
