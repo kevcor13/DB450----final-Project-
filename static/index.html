@@ -1,269 +1,333 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shop Floor — Service Ledger</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop Floor — Service Ledger</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<div class="app">
+  <div class="app">
 
-  <aside class="sidebar">
-    <div class="brand">
-      <span class="brand-mark">⛭</span>
-      <div>
-        <div class="brand-name">Shop Floor</div>
-        <div class="brand-sub">Service Ledger</div>
-      </div>
-    </div>
-
-    <nav class="nav">
-      <button class="nav-item active" data-section="appointments">
-        <span class="nav-label">Appointments</span>
-      </button>
-      <button class="nav-item" data-section="invoices">
-        <span class="nav-label">Invoices</span>
-      </button>
-      <button class="nav-item" data-section="customers">
-        <span class="nav-label">Customers</span>
-      </button>
-      <button class="nav-item" data-section="employees">
-        <span class="nav-label">Employees</span>
-      </button>
-      <button class="nav-item" data-section="parts">
-        <span class="nav-label">Parts</span>
-      </button>
-    </nav>
-
-    <div class="sidebar-foot">
-      <span id="conn-dot" class="conn-dot"></span>
-      <span id="conn-label">connecting…</span>
-    </div>
-  </aside>
-
-  <main class="main">
-
-    <!-- APPOINTMENTS -->
-    <section id="section-appointments" class="section active">
-      <header class="section-head">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-mark">⛭</span>
         <div>
-          <h1>Appointments</h1>
-          <p class="section-sub">Book a job, assign a tech, and the invoice writes itself.</p>
+          <div class="brand-name">Shop Floor</div>
+          <div class="brand-sub">Service Ledger</div>
         </div>
-        <button class="btn btn-primary" data-open-modal="new-appointment">+ New appointment</button>
-      </header>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Ticket</th><th>Customer</th><th>Tech</th><th>Date</th><th>Status</th><th>Labor</th><th></th>
-            </tr>
-          </thead>
-          <tbody id="appointments-body">
-            <tr><td colspan="7" class="empty-row">Loading…</td></tr>
-          </tbody>
-        </table>
       </div>
-    </section>
 
-    <!-- INVOICES -->
-    <section id="section-invoices" class="section">
-      <header class="section-head">
+      <div class="brand">
+        <span class="brand-mark">⛭</span>
         <div>
-          <h1>Invoices</h1>
-          <p class="section-sub">Every job, priced out — parts plus labor.</p>
+          <div class="brand-name">Shop Floor</div>
+          <div class="brand-sub">Service Ledger</div>
         </div>
-      </header>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>Ticket</th><th>Customer</th><th>Parts</th><th>Labor</th><th>Total</th><th>Status</th><th></th></tr>
-          </thead>
-          <tbody id="invoices-body">
-            <tr><td colspan="7" class="empty-row">Loading…</td></tr>
-          </tbody>
-        </table>
+        <button class="control-tab" id="control-tab" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
       </div>
-    </section>
+      <nav class="nav">
+        <button class="nav-item active" data-section="appointments">
+          <span class="nav-label">Appointments</span>
+        </button>
+        <button class="nav-item" data-section="invoices">
+          <span class="nav-label">Invoices</span>
+        </button>
+        <button class="nav-item" data-section="customers">
+          <span class="nav-label">Customers</span>
+        </button>
+        <button class="nav-item" data-section="employees">
+          <span class="nav-label">Employees</span>
+        </button>
+        <button class="nav-item" data-section="parts">
+          <span class="nav-label">Parts</span>
+        </button>
+      </nav>
 
-    <!-- CUSTOMERS -->
-    <section id="section-customers" class="section">
-      <header class="section-head">
-        <div>
-          <h1>Customers</h1>
-          <p class="section-sub">Who's on file, and what they drive.</p>
+      <div class="sidebar-foot">
+        <span id="conn-dot" class="conn-dot"></span>
+        <span id="conn-label">connecting…</span>
+      </div>
+    </aside>
+
+    <main class="main">
+
+      <!-- APPOINTMENTS -->
+      <section id="section-appointments" class="section active">
+        <header class="section-head">
+          <div>
+            <h1>Appointments</h1>
+            <p class="section-sub">Book a job, assign a tech, and the invoice writes itself.</p>
+          </div>
+          <button class="btn btn-primary" data-open-modal="new-appointment">+ New appointment</button>
+        </header>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Ticket</th>
+                <th>Customer</th>
+                <th>Tech</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Labor</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="appointments-body">
+              <tr>
+                <td colspan="7" class="empty-row">Loading…</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <button class="btn btn-primary" id="btn-new-customer">+ New customer</button>
-      </header>
+      </section>
 
-      <input type="text" id="customer-search" class="search-input" placeholder="Search by name, email, plate, or vehicle…">
+      <!-- INVOICES -->
+      <section id="section-invoices" class="section">
+        <header class="section-head">
+          <div>
+            <h1>Invoices</h1>
+            <p class="section-sub">Every job, priced out — parts plus labor.</p>
+          </div>
+        </header>
 
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Vehicle</th><th>Plate</th><th></th></tr></thead>
-          <tbody id="customers-body">
-            <tr><td colspan="6" class="empty-row">Loading…</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- EMPLOYEES -->
-    <section id="section-employees" class="section">
-      <header class="section-head">
-        <div>
-          <h1>Employees</h1>
-          <p class="section-sub">Techs on the floor and their billed hours.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Ticket</th>
+                <th>Customer</th>
+                <th>Parts</th>
+                <th>Labor</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="invoices-body">
+              <tr>
+                <td colspan="7" class="empty-row">Loading…</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <button class="btn btn-primary" data-open-modal="new-employee">+ New employee</button>
-      </header>
+      </section>
 
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>ID</th><th>Name</th><th>Rate</th><th>Logged hrs</th><th></th></tr></thead>
-          <tbody id="employees-body">
-            <tr><td colspan="5" class="empty-row">Loading…</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+      <!-- CUSTOMERS -->
+      <section id="section-customers" class="section">
+        <header class="section-head">
+          <div>
+            <h1>Customers</h1>
+            <p class="section-sub">Who's on file, and what they drive.</p>
+          </div>
+          <button class="btn btn-primary" id="btn-new-customer">+ New customer</button>
+        </header>
 
-    <!-- PARTS -->
-    <section id="section-parts" class="section">
-      <header class="section-head">
-        <div>
-          <h1>Parts catalog</h1>
-          <p class="section-sub">Reference pricing used when building invoices.</p>
+        <input type="text" id="customer-search" class="search-input"
+          placeholder="Search by name, email, plate, or vehicle…">
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Vehicle</th>
+                <th>Plate</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="customers-body">
+              <tr>
+                <td colspan="6" class="empty-row">Loading…</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <button class="btn btn-primary" id="btn-new-part">+ New part</button>
-      </header>
+      </section>
 
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Part ID</th><th>Name</th><th>Price</th><th></th></tr></thead>
-          <tbody id="parts-body">
-            <tr><td colspan="4" class="empty-row">Loading…</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+      <!-- EMPLOYEES -->
+      <section id="section-employees" class="section">
+        <header class="section-head">
+          <div>
+            <h1>Employees</h1>
+            <p class="section-sub">Techs on the floor and their billed hours.</p>
+          </div>
+          <button class="btn btn-primary" data-open-modal="new-employee">+ New employee</button>
+        </header>
 
-  </main>
-</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Rate</th>
+                <th>Logged hrs</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="employees-body">
+              <tr>
+                <td colspan="5" class="empty-row">Loading…</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
 
-<!-- ============ MODALS ============ -->
+      <!-- PARTS -->
+      <section id="section-parts" class="section">
+        <header class="section-head">
+          <div>
+            <h1>Parts catalog</h1>
+            <p class="section-sub">Reference pricing used when building invoices.</p>
+          </div>
+          <button class="btn btn-primary" id="btn-new-part">+ New part</button>
+        </header>
 
-<div class="modal-backdrop" id="modal-backdrop"></div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Part ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="parts-body">
+              <tr>
+                <td colspan="4" class="empty-row">Loading…</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
 
-<div class="modal" id="modal-new-employee">
-  <h2>New employee</h2>
-  <form id="form-new-employee">
-    <label>First name <input required name="first_name"></label>
-    <label>Last name <input required name="last_name"></label>
-    <label>Hourly rate ($) <input type="number" step="0.01" name="hourly_rate" value="50"></label>
-    <div class="form-actions">
-      <button type="button" class="btn btn-ghost" data-close-modal>Cancel</button>
-      <button type="submit" class="btn btn-primary">Add employee</button>
-    </div>
-    <p class="form-error" data-error></p>
-  </form>
-</div>
+    </main>
+  </div>
 
-<div class="modal modal-wide" id="modal-new-customer">
-  <h2 id="customer-modal-title">New customer</h2>
-  <form id="form-new-customer">
-    <input type="hidden" name="customer_id">
+  <!-- ============ MODALS ============ -->
 
-    <div class="form-grid">
+  <div class="modal-backdrop" id="modal-backdrop"></div>
+
+  <div class="modal" id="modal-new-employee">
+    <h2>New employee</h2>
+    <form id="form-new-employee">
       <label>First name <input required name="first_name"></label>
       <label>Last name <input required name="last_name"></label>
-    </div>
-    <label>Email <input required type="email" name="email"></label>
-
-    <h3 class="form-section-heading">Vehicle</h3>
-    <div class="form-grid">
-      <label>Type <input required name="automobile_type" placeholder="e.g. Sedan, Truck, SUV"></label>
-      <label>Year <input type="number" min="1900" max="2100" name="vehicle_year" placeholder="2021"></label>
-      <label>Make <input name="vehicle_make" placeholder="Toyota"></label>
-      <label>Model <input name="vehicle_model" placeholder="Camry"></label>
-      <label>Color <input name="vehicle_color" placeholder="Blue"></label>
-      <label>License plate <input name="license_plate" placeholder="ABC-1234"></label>
-    </div>
-    <label>VIN <input name="vin" placeholder="1HGCM82633A004352" maxlength="17"></label>
-
-    <div class="form-actions">
-      <button type="button" class="btn btn-ghost" data-close-modal>Cancel</button>
-      <button type="submit" class="btn btn-primary" id="customer-submit-btn">Add customer</button>
-    </div>
-    <p class="form-error" data-error></p>
-  </form>
-</div>
-
-<div class="modal modal-wide" id="modal-new-appointment">
-  <h2>New appointment</h2>
-  <form id="form-new-appointment">
-    <div class="form-grid">
-      <label>Customer
-        <select required name="customer_id" id="apt-customer-select"></select>
-      </label>
-      <label>Tech
-        <select required name="employee_id" id="apt-employee-select"></select>
-      </label>
-      <label>Date <input required type="date" name="date"></label>
-      <label>Status
-        <select required name="status" id="apt-status-select"></select>
-      </label>
-      <label>Labor hours <input required type="number" min="0" step="0.5" name="labor_hours_billed" value="1"></label>
-    </div>
-
-    <h3 class="parts-heading">Parts needed</h3>
-    <div id="apt-parts-list" class="parts-list"></div>
-
-    <div class="ticket-preview" id="ticket-preview">
-      <span>Estimated total</span>
-      <span id="ticket-preview-total" class="mono">$0.00</span>
-    </div>
-
-    <div class="form-actions">
-      <button type="button" class="btn btn-ghost" data-close-modal>Cancel</button>
-      <button type="submit" class="btn btn-primary">Create appointment + invoice</button>
-    </div>
-    <p class="form-error" data-error></p>
-  </form>
-</div>
-
-<div class="modal" id="modal-new-part">
-  <h2 id="part-modal-title">New part</h2>
-  <form id="form-part">
-    <input type="hidden" name="part_id">
-    <label>Name <input required name="name" placeholder="e.g. Cabin Air Filter"></label>
-    <label>Price ($) <input required type="number" step="0.01" min="0" name="price" placeholder="19.99"></label>
-    <div class="form-actions">
-      <button type="button" class="btn btn-ghost" data-close-modal>Cancel</button>
-      <button type="submit" class="btn btn-primary" id="part-submit-btn">Add part</button>
-    </div>
-    <p class="form-error" data-error></p>
-  </form>
-</div>
-
-<div class="modal modal-wide" id="modal-invoice-detail">
-  <div class="ticket" id="ticket-content">
-    <!-- filled dynamically -->
+      <label>Hourly rate ($) <input type="number" step="0.01" name="hourly_rate" value="50"></label>
+      <div class="form-actions">
+        <button type="button" class="btn btn-ghost" data-close-modal>Cancel</button>
+        <button type="submit" class="btn btn-primary">Add employee</button>
+      </div>
+      <p class="form-error" data-error></p>
+    </form>
   </div>
-  <div class="form-actions">
-    <button type="button" class="btn btn-ghost" data-close-modal>Close</button>
+
+  <div class="modal modal-wide" id="modal-new-customer">
+    <h2 id="customer-modal-title">New customer</h2>
+    <form id="form-new-customer">
+      <input type="hidden" name="customer_id">
+
+      <div class="form-grid">
+        <label>First name <input required name="first_name"></label>
+        <label>Last name <input required name="last_name"></label>
+      </div>
+      <label>Email <input required type="email" name="email"></label>
+
+      <h3 class="form-section-heading">Vehicle</h3>
+      <div class="form-grid">
+        <label>Type <input required name="automobile_type" placeholder="e.g. Sedan, Truck, SUV"></label>
+        <label>Year <input type="number" min="1900" max="2100" name="vehicle_year" placeholder="2021"></label>
+        <label>Make <input name="vehicle_make" placeholder="Toyota"></label>
+        <label>Model <input name="vehicle_model" placeholder="Camry"></label>
+        <label>Color <input name="vehicle_color" placeholder="Blue"></label>
+        <label>License plate <input name="license_plate" placeholder="ABC-1234"></label>
+      </div>
+      <label>VIN <input name="vin" placeholder="1HGCM82633A004352" maxlength="17"></label>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-ghost" data-close-modal>Cancel</button>
+        <button type="submit" class="btn btn-primary" id="customer-submit-btn">Add customer</button>
+      </div>
+      <p class="form-error" data-error></p>
+    </form>
   </div>
-</div>
 
-<div class="toast" id="toast"></div>
+  <div class="modal modal-wide" id="modal-new-appointment">
+    <h2>New appointment</h2>
+    <form id="form-new-appointment">
+      <div class="form-grid">
+        <label>Customer
+          <select required name="customer_id" id="apt-customer-select"></select>
+        </label>
+        <label>Tech
+          <select required name="employee_id" id="apt-employee-select"></select>
+        </label>
+        <label>Date <input required type="date" name="date"></label>
+        <label>Status
+          <select required name="status" id="apt-status-select"></select>
+        </label>
+        <label>Labor hours <input required type="number" min="0" step="0.5" name="labor_hours_billed" value="1"></label>
+      </div>
 
-<script src="app.js"></script>
+      <h3 class="parts-heading">Parts needed</h3>
+      <div id="apt-parts-list" class="parts-list"></div>
+
+      <div class="ticket-preview" id="ticket-preview">
+        <span>Estimated total</span>
+        <span id="ticket-preview-total" class="mono">$0.00</span>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-ghost" data-close-modal>Cancel</button>
+        <button type="submit" class="btn btn-primary">Create appointment + invoice</button>
+      </div>
+      <p class="form-error" data-error></p>
+    </form>
+  </div>
+
+  <div class="modal" id="modal-new-part">
+    <h2 id="part-modal-title">New part</h2>
+    <form id="form-part">
+      <input type="hidden" name="part_id">
+      <label>Name <input required name="name" placeholder="e.g. Cabin Air Filter"></label>
+      <label>Price ($) <input required type="number" step="0.01" min="0" name="price" placeholder="19.99"></label>
+      <div class="form-actions">
+        <button type="button" class="btn btn-ghost" data-close-modal>Cancel</button>
+        <button type="submit" class="btn btn-primary" id="part-submit-btn">Add part</button>
+      </div>
+      <p class="form-error" data-error></p>
+    </form>
+  </div>
+
+  <div class="modal modal-wide" id="modal-invoice-detail">
+    <div class="ticket" id="ticket-content">
+      <!-- filled dynamically -->
+    </div>
+    <div class="form-actions">
+      <button type="button" class="btn btn-ghost" data-close-modal>Close</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
 </body>
+
 </html>
